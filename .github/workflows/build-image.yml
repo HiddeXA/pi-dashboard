@@ -25,6 +25,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Pakketbronnen van de runner bijwerken (met herhaalpogingen)
+        run: |
+          for i in 1 2 3 4 5; do
+            if sudo apt-get update -q 2>&1 | tee /tmp/apt.log && ! grep -q "^W: Failed to fetch" /tmp/apt.log; then break; fi
+            echo "Poging $i mislukt, over 20 s opnieuw"; sleep 20
+          done
+
       - name: Dashboard in de pi-gen-stage zetten
         run: |
           mkdir -p image/stage-dashboard/00-install/files
