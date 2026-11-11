@@ -51,7 +51,6 @@ jobs:
           password: ${{ secrets.PI_PASSWORD }}
           wpa-essid: ${{ secrets.WIFI_NAAM }}
           wpa-password: ${{ secrets.WIFI_WACHTWOORD }}
-          increase-runner-disk-size: true
 
       - name: Image uploaden
         uses: actions/upload-artifact@v4
