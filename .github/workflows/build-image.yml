@@ -40,7 +40,7 @@ jobs:
           compression: xz
           hostname: dashboard
           locale: nl_NL.UTF-8
-          timezone: Europe/Amsterdam
+          timezone: Europe/Brussels     # bouwtool kent Amsterdam niet; de stage zet hem terug
           keyboard-keymap: us
           keyboard-layout: English (US)
           wpa-country: NL
