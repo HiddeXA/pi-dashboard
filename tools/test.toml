@@ -1,0 +1,29 @@
+# Testinstellingen voor gebruik met tools/mock_ha.py
+titel = "Thuis (test)"
+modules = ["homeassistant", "spotify", "systeem"]
+verberg_cursor = false
+
+[homeassistant]
+url = "http://127.0.0.1:8123"
+token = "test"
+
+[[homeassistant.pagina]]
+naam = "Woonkamer"
+icoon = "home"
+entiteiten = ["light.woonkamer", "light.eettafel", "light.ledstrip", "switch.tv", "switch.koffie", "scene.film_kijken", "cover.rolluik_voor", "sensor.temperatuur_buiten"]
+
+[[homeassistant.pagina]]
+naam = "Klimaat"
+icoon = "thermo"
+entiteiten = ["climate.thermostaat", "sensor.temperatuur_buiten", "light.bestaat_niet"]
+
+[spotify]
+standaard_apparaat = "Woonkamer"
+
+[[spotify.favoriet]]
+naam = "Zondagochtend"
+uri = "spotify:playlist:test1"
+
+[[spotify.favoriet]]
+naam = "Focus"
+uri = "spotify:playlist:test2"

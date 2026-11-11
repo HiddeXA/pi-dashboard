@@ -1,0 +1,9 @@
+.sys-tile { min-height: 96px; display: flex; flex-direction: column; justify-content: space-between; }
+.sys-label { color: var(--muted); font-size: 13px; }
+.sys-value { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.sys-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.sys-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 16px; border-radius: 14px; background: var(--panel); border: 1px solid var(--line);
+}
+.sys-btn:active { background: var(--panel-2); }

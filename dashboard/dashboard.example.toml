@@ -1,0 +1,77 @@
+# ==========================================================================
+#  Pi Dashboard - instellingen
+#
+#  Dit bestand staat op de SD-kaart in de partitie "bootfs", zodat je het op
+#  je pc kunt bewerken. Op de Pi zelf: /boot/firmware/dashboard.toml
+#  Wijzigingen worden vanzelf opgepikt (scherm ververst binnen enkele seconden,
+#  of tik op Systeem → Scherm vernieuwen).
+# ==========================================================================
+
+titel = "Thuis"
+
+# Welke modules aan staan, in deze volgorde in het menu.
+# Een eigen module zet je in /opt/pi-dashboard/dashboard/modules/<naam>/
+modules = ["homeassistant", "spotify", "systeem"]
+
+# Hoe vaak (in seconden) de status uit Home Assistant wordt opgehaald.
+ververs_seconden = 2
+
+# Muiscursor verbergen (handig bij een touchscreen).
+verberg_cursor = true
+
+# Alleen het scherm van de Pi zelf mag het dashboard openen. Zet op "0.0.0.0"
+# om het ook via je telefoon te openen (http://<ip-van-de-pi>:8080).
+# Let op: dan kan iedereen op je wifi je apparaten bedienen.
+luister = "127.0.0.1"
+
+
+[homeassistant]
+url = "http://homeassistant.local:8123"
+# Home Assistant → je profiel → Beveiliging → Langlevende toegangstokens
+token = "PLAK_HIER_JE_TOKEN"
+
+# Kies per pagina welke apparaten je ziet. Laat je alle [[homeassistant.pagina]]
+# blokken weg, dan maakt het dashboard zelf pagina's voor lampen, schakelaars
+# en scènes. Entiteit-id's vind je in HA onder Instellingen → Entiteiten.
+#
+# [[homeassistant.pagina]]
+# naam = "Woonkamer"
+# icoon = "🛋️"          # emoji, of: home bulb power scene thermo blinds music info
+# entiteiten = [
+#   "light.woonkamer",
+#   { entiteit = "light.eettafel", naam = "Eettafel" },
+#   "switch.tv",
+#   "scene.film_kijken",
+#   "cover.rolluik_voor",
+# ]
+#
+# [[homeassistant.pagina]]
+# naam = "Klimaat"
+# icoon = "thermo"
+# entiteiten = ["climate.thermostaat", "sensor.temperatuur_buiten", "sensor.luchtvochtigheid"]
+
+
+[spotify]
+# Spotify gaat via Home Assistant: voeg daar eerst de Spotify-integratie toe
+# (Instellingen → Apparaten & diensten → Integratie toevoegen → Spotify).
+# Leeg laten = automatisch de eerste media_player.spotify_* gebruiken.
+# entiteit = "media_player.spotify_jouw_naam"
+
+# Op welk apparaat een favoriet start als Spotify nergens speelt
+# (naam zoals hij in de Spotify-app staat).
+# standaard_apparaat = "Woonkamer speaker"
+
+# Favorieten: tik erop om af te spelen. URI vind je in Spotify via
+# Delen → Link kopiëren (https://open.spotify.com/playlist/ABC → spotify:playlist:ABC)
+# [[spotify.favoriet]]
+# naam = "Mijn favoriete nummers"
+# uri = "spotify:playlist:PLAK_HIER_HET_ID"
+#
+# [[spotify.favoriet]]
+# naam = "Ochtendradio"
+# uri = "spotify:playlist:..."
+# apparaat = "Keuken"
+
+
+[systeem]
+ververs_seconden = 10

@@ -1,0 +1,13 @@
+[Unit]
+Description=Pi Dashboard server
+After=network.target
+
+[Service]
+User=kiosk
+ExecStart=/usr/bin/python3 /opt/pi-dashboard/dashboard/server.py
+Environment=PYTHONUNBUFFERED=1
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

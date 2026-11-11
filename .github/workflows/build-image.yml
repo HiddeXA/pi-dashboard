@@ -1,0 +1,67 @@
+# Bouwt een kant-en-klare Raspberry Pi-image met het dashboard erop.
+# Start handmatig via Actions → "Image bouwen" → Run workflow,
+# of automatisch als je een tag als v1.0 pusht (dan komt hij bij Releases).
+name: Image bouwen
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ["v*"]
+    branches: [main]
+    paths:
+      - "dashboard/**"
+      - "kiosk/**"
+      - "install.sh"
+      - "image/**"
+      - ".github/workflows/build-image.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Dashboard in de pi-gen-stage zetten
+        run: |
+          mkdir -p image/stage-dashboard/00-install/files
+          cp -a dashboard kiosk install.sh image/stage-dashboard/00-install/files/
+
+      - name: Image bouwen met pi-gen
+        id: build
+        uses: usimd/pi-gen-action@v1
+        with:
+          image-name: pi-dashboard
+          stage-list: stage0 stage1 stage2 ./image/stage-dashboard
+          pi-gen-version: arm64          # 64-bit, werkt op Pi 3, Zero 2 W, 4 en 5
+          compression: xz
+          hostname: dashboard
+          locale: nl_NL.UTF-8
+          timezone: Europe/Amsterdam
+          keyboard-keymap: us
+          keyboard-layout: English (US)
+          wpa-country: NL
+          enable-ssh: 1
+          username: pi
+          # Optioneel: stel deze in onder Settings → Secrets → Actions.
+          # Leeg = instellen met Raspberry Pi Imager (aanbevolen).
+          password: ${{ secrets.PI_PASSWORD }}
+          wpa-essid: ${{ secrets.WIFI_NAAM }}
+          wpa-password: ${{ secrets.WIFI_WACHTWOORD }}
+          increase-runner-disk-size: true
+
+      - name: Image uploaden
+        uses: actions/upload-artifact@v4
+        with:
+          name: pi-dashboard-image
+          path: ${{ steps.build.outputs.image-path }}
+          retention-days: 14
+
+      - name: Release maken (alleen bij een tag)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.build.outputs.image-path }}

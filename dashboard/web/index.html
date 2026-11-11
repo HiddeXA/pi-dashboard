@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Dashboard</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="app" class="app">
+    <nav class="rail">
+      <div class="clock">
+        <div id="clock-time" class="clock-time">--:--</div>
+        <div id="clock-date" class="clock-date"></div>
+      </div>
+      <div id="nav" class="nav"></div>
+      <div id="status-dot" class="status-dot" title="Verbinding"></div>
+    </nav>
+    <main class="main">
+      <header class="page-head"><h1 id="page-title"></h1></header>
+      <section id="pages" class="pages"></section>
+    </main>
+    <footer id="bars" class="bars"></footer>
+  </div>
+  <div id="banner" class="banner" hidden></div>
+  <div id="toast" class="toast" hidden></div>
+  <script src="/app.js"></script>
+</body>
+</html>
