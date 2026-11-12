@@ -143,7 +143,14 @@ class HomeAssistant:
                 payload = resp.read()
                 if raw:
                     return payload, resp.headers.get("Content-Type", "application/octet-stream")
-                return json.loads(payload or b"null")
+                try:
+                    return json.loads(payload or b"null")
+                except json.JSONDecodeError as e:
+                    start = payload[:80].decode("utf-8", "replace").strip()
+                    log(f"Geen JSON van {base}{path}: {start!r}")
+                    raise HAError(
+                        f"{base} geeft geen antwoord zoals Home Assistant dat geeft. "
+                        "Klopt de url? (zie journalctl -u pi-dashboard)") from e
         except urllib.error.HTTPError as e:
             if e.code == 401:
                 raise HAError("Home Assistant weigert de token (401). Controleer je token.") from e
@@ -157,6 +164,9 @@ class HomeAssistant:
             if self._cache is not None and time.monotonic() - self._cache_time < max_age:
                 return self._cache
         states = self.request("GET", "/api/states")
+        if not isinstance(states, list):
+            log(f"Onverwacht antwoord op /api/states: {str(states)[:200]}")
+            raise HAError("Onverwacht antwoord van Home Assistant op /api/states")
         with self._lock:
             self._cache = states
             self._cache_time = time.monotonic()
@@ -318,7 +328,7 @@ class Handler(BaseHTTPRequestHandler):
             return self.send_json({"fout": str(e)}, 502)
         except Exception as e:
             log("Fout bij", path, repr(e))
-            return self.send_json({"fout": "Interne fout"}, 500)
+            return self.send_json({"fout": f"Interne fout: {type(e).__name__}: {e}"[:300]}, 500)
 
     def do_POST(self):
         path = urllib.parse.urlsplit(self.path).path
