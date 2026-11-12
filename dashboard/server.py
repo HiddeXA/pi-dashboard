@@ -125,6 +125,7 @@ class HomeAssistant:
         self._cache_time = 0.0
 
     def _settings(self):
+        self.config.reload()  # nieuwe url/token in dashboard.toml direct gebruiken
         ha = self.config.section("homeassistant")
         return str(ha.get("url", "")).rstrip("/"), str(ha.get("token", ""))
 
