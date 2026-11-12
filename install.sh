@@ -92,10 +92,15 @@ say "Automatisch starten bij opstarten instellen"
 install -m 644 "$APP"/kiosk/*.service /etc/systemd/system/
 systemctl enable pi-dashboard.service pi-dashboard-kiosk.service
 systemctl set-default graphical.target
+# Het inlogscherm op tty1 uitzetten: anders start de Pi soms op in de terminal
+# in plaats van het dashboard. Inloggen kan nog via SSH of Ctrl+Alt+F2.
+systemctl disable getty@tty1.service 2>/dev/null || true
+rm -f /etc/systemd/system/getty.target.wants/getty@tty1.service
 
 if [[ $MODE == normaal ]]; then
   systemctl daemon-reload
   systemctl restart pi-dashboard.service
+  systemctl stop getty@tty1.service 2>/dev/null || true
   systemctl restart pi-dashboard-kiosk.service || true
   IP="$(hostname -I 2>/dev/null | awk '{print $1}')"
   echo

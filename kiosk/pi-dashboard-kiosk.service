@@ -2,9 +2,11 @@
 Description=Pi Dashboard scherm (Chromium in kioskmodus)
 After=systemd-user-sessions.service plymouth-quit-wait.service pi-dashboard.service
 Wants=pi-dashboard.service
-# Neemt het eerste scherm (tty1) over in plaats van het inlogscherm
+# Neemt het eerste scherm (tty1) over in plaats van het inlogscherm.
+# install.sh zet getty@tty1 uit, anders wint bij het opstarten soms het inlogscherm.
 Conflicts=getty@tty1.service
-After=getty@tty1.service
+# Blijf het scherm opnieuw proberen, ook als het een paar keer snel misgaat
+StartLimitIntervalSec=0
 
 [Service]
 User=kiosk
